@@ -1,0 +1,147 @@
+:root {
+  /* Ajusta el valor si lo defines en otro tema / Webflow */
+  --_offbeat---color-accent-main: #c3a677;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  background: #000;
+}
+
+#root {
+  min-height: 100%;
+}
+
+/* Cabinet Grotesk medium — Scene, Contact, Hero (FallingLetters) */
+.scene-featured-heading,
+.contact-title-display,
+.hero-falling-letter {
+  font-family: "Cabinet Grotesk", Inter, system-ui, sans-serif;
+  font-weight: 500;
+}
+
+/* About: vídeo flower — pulso suave de opacidad */
+@keyframes about-flower-opacity {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 0.98;
+  }
+}
+
+.about-flower-video {
+  animation: about-flower-opacity 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-flower-video {
+    animation: none;
+    opacity: 0.9;
+  }
+}
+
+/* Scene: vídeo preview — entra al 90% y crece suave hasta 100% */
+@keyframes scene-video-enter-scale {
+  from {
+    transform: scale(0.9);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.scene-video-enter-scale {
+  transform-origin: center center;
+  animation: scene-video-enter-scale 1.05s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-video-enter-scale {
+    animation: none;
+    transform: scale(1);
+  }
+}
+
+/* Ocultar cursor del sistema cuando el cursor personalizado está activo */
+html.custom-cursor-active,
+html.custom-cursor-active * {
+  cursor: none !important;
+}
+
+.custom-cursor-wrap {
+  mix-blend-mode: difference;
+  -webkit-mix-blend-mode: difference;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes blurReveal {
+  from {
+    filter: blur(24px);
+    opacity: 0.4;
+  }
+  to {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpFadeSoft {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 0.7; transform: translateY(0); }
+}
+
+/* Hero canvas stays always active to avoid WebGL context loss.
+   The Scene section covers it via z-index when visible. */
+
+/* Nav: semi-transparent black background when scrolled */
+body.scrolled-past-hero .hero-nav {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+@media (max-width: 768px) {
+  .hero-about {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+  .hero-about > div:first-child {
+    flex: 1 1 auto !important;
+    max-width: 100% !important;
+  }
+  .hero-about > div:last-child {
+    flex: 1 1 auto !important;
+  }
+}
+
+/* Scene: título sobre vídeo — inversión respecto al fondo (vídeo + negro) */
+.scene-blend-title {
+  mix-blend-mode: difference;
+  -webkit-mix-blend-mode: difference;
+}
+
