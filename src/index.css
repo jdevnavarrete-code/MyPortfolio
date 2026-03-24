@@ -30,6 +30,40 @@ html, body {
   font-weight: 500;
 }
 
+@media (max-width: 768px) {
+  .hero-inner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start;
+    padding: 5.5rem 1.25rem 3rem !important;
+  }
+
+  .hero-copy {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100%;
+    padding-right: 0 !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+
+  .hero-eyebrow {
+    font-size: clamp(0.65rem, 2.8vw, 0.8rem) !important;
+    letter-spacing: 0.16em !important;
+  }
+
+  .hero-headline {
+    font-size: clamp(1.45rem, 5.8vw, 2.05rem) !important;
+    line-height: 1.28 !important;
+    letter-spacing: -0.03em !important;
+  }
+
+  .hero-copy > div:last-child {
+    margin-top: 1.75rem !important;
+    font-size: clamp(0.85rem, 3.5vw, 0.95rem) !important;
+  }
+}
+
 /* About: vídeo flower — pulso suave de opacidad */
 @keyframes about-flower-opacity {
   0%,

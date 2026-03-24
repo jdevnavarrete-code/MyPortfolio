@@ -230,6 +230,7 @@ export default function Hero() {
       <Header light={pastHero} />
 
       <div
+        className="hero-inner"
         style={{
           position: "relative",
           zIndex: 2,
@@ -246,6 +247,7 @@ export default function Hero() {
 
         {/* Texto pegado a la derecha */}
         <div
+          className="hero-copy"
           style={{
             marginLeft: "auto",
             width: "42%",
@@ -258,6 +260,7 @@ export default function Hero() {
           }}
         >
           <p
+            className="hero-eyebrow"
             style={{
               margin: 0,
               fontFamily: "Times New Roman, Times, serif",
@@ -271,6 +274,7 @@ export default function Hero() {
             (i am)
           </p>
           <h1
+            className="hero-headline"
             style={{
               margin: "0.5rem 0 0",
               fontFamily: "Arial, sans-serif",
