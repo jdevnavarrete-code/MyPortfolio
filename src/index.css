@@ -52,7 +52,102 @@ html, body {
   }
 }
 
-/* Scene: vídeo preview — entra al 90% y crece suave hasta 100% */
+/* About: móvil — cierre del quote tras el 1er párrafo; luego flor y bio (display:contents + order) */
+@media (max-width: 768px) {
+  .about-quote-lead {
+    position: relative;
+    z-index: 4;
+  }
+
+  .about-quote-lead-text {
+    font-size: clamp(1.45rem, 5.4vw, 2.05rem) !important;
+    line-height: 1.28 !important;
+  }
+
+  .about-flower-copy .about-flower-quote-inner > p {
+    font-size: clamp(1.3rem, 4.6vw, 1.85rem) !important;
+    line-height: 1.28 !important;
+  }
+
+  .about-flower-row {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: clamp(1.25rem, 4vw, 2rem);
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: clamp(2.5rem, 8vh, 4rem);
+    min-height: auto;
+  }
+
+  .about-flower-media {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none;
+    width: 100% !important;
+    max-width: none !important;
+    flex: none !important;
+    height: auto !important;
+    min-height: min(48vh, 400px);
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    z-index: 0;
+    pointer-events: auto;
+    order: 2;
+  }
+
+  .about-flower-media .about-flower-video {
+    width: 100% !important;
+    height: 68vh !important;
+    max-height: min(68vh, 520px);
+    min-height: min(48vh, 400px);
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .about-flower-copy {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    z-index: 1;
+    max-width: 100% !important;
+    width: 100%;
+    padding: 0 !important;
+    box-sizing: border-box;
+    margin-top: 0;
+    pointer-events: auto !important;
+    display: contents !important;
+  }
+
+  .about-flower-bio {
+    order: 3;
+    width: 100%;
+    padding: 0 clamp(1rem, 4vw, 1.5rem) clamp(2rem, 6vh, 3rem);
+    box-sizing: border-box;
+  }
+
+  .about-flower-bio .about-bio {
+    margin-top: 0 !important;
+  }
+
+  .about-flower-quote-inner {
+    order: 1;
+    width: 100%;
+    padding: 0 clamp(1rem, 4vw, 1.5rem);
+    box-sizing: border-box;
+  }
+
+  .about-flower-copy .about-flower-quote-inner,
+  .about-flower-copy .about-flower-quote-inner p,
+  .about-flower-copy .about-flower-quote-inner span {
+    text-align: left !important;
+    text-align-last: auto !important;
+  }
+}
 @keyframes scene-video-enter-scale {
   from {
     transform: scale(0.9);

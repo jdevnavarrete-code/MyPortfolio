@@ -109,6 +109,7 @@ function ScrollRevealLine({
 function BioParagraph({ visible = false }) {
   return (
     <div
+      className="about-bio"
       style={{
         marginTop: "clamp(2.5rem, 6vw, 5.5rem)",
         width: "100%",
@@ -145,6 +146,17 @@ export default function About() {
   const flowerVideoRef = useRef(null)
   const aboutRef = useRef(null)
   const [quoteRevealed, setQuoteRevealed] = useState(false)
+  const [isMobileLayout, setIsMobileLayout] = useState(() =>
+    typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches,
+  )
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)")
+    const sync = () => setIsMobileLayout(mq.matches)
+    sync()
+    mq.addEventListener("change", sync)
+    return () => mq.removeEventListener("change", sync)
+  }, [])
 
   // Scrub del vídeo con scroll normal (sin bloquear ni agregar espacio extra)
   useEffect(() => {
@@ -211,6 +223,7 @@ export default function About() {
     >
       {/* Primeras dos líneas del quote - fluyen con el scroll */}
       <div
+        className="about-quote-lead"
         style={{
           position: "relative",
           width: "100%",
@@ -221,6 +234,7 @@ export default function About() {
         }}
       >
         <p
+          className="about-quote-lead-text"
           style={{
             margin: 0,
             width: "100%",
@@ -245,8 +259,9 @@ export default function About() {
         </p>
       </div>
 
-      {/* Video (65% ancho como antes) + tercer párrafo superpuesto arriba + bio */}
+      {/* Video + cierre quote + bio — móvil: cierre → flor → bio (order en CSS) */}
       <div
+        className="about-flower-row"
         style={{
           position: "relative",
           display: "flex",
@@ -263,8 +278,9 @@ export default function About() {
           Tercer bloque del quote: fuera del vídeo para que el borde derecho coincida
           con la columna de la bio (pegado al layout), no solo al borde del vídeo.
         */}
-        {/* Flower video — alineado a la izquierda de la fila */}
+        {/* Flower video — desktop: columna izquierda; móvil: capa de fondo ancho completo */}
         <div
+          className="about-flower-media"
           style={{
             flex: "0 0 52%",
             position: "relative",
@@ -330,8 +346,9 @@ export default function About() {
           />
         </div>
 
-        {/* Cierre del quote + bio centrada justo debajo */}
+        {/* Cierre del quote + bio — móvil: .about-flower-copy display:contents para reordenar */}
         <div
+          className="about-flower-copy"
           style={{
             position: "absolute",
             top: 0,
@@ -346,7 +363,10 @@ export default function About() {
             alignItems: "stretch",
           }}
         >
-          <div style={{ width: "100%", textAlign: "justify", textAlignLast: "right" }}>
+          <div
+            className="about-flower-quote-inner"
+            style={{ width: "100%", textAlign: "justify", textAlignLast: "right" }}
+          >
             <p
               style={{
                 margin: 0,
@@ -382,7 +402,9 @@ export default function About() {
               </ScrollRevealLine>
             </p>
           </div>
-          <BioParagraph visible={quoteRevealed} />
+          <div className="about-flower-bio">
+            <BioParagraph visible={isMobileLayout || quoteRevealed} />
+          </div>
         </div>
       </div>
     </section>
