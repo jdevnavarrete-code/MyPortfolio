@@ -134,7 +134,7 @@ function FallingLetters() {
         <span
           key={i}
           ref={(el) => { letterRefs.current[i] = el }}
-          className="hero-falling-letter"
+          className={letter === "O" ? "hero-falling-letter hero-falling-letter-o" : "hero-falling-letter"}
           style={{
             position: "absolute",
             top: -9999,
@@ -301,7 +301,7 @@ export default function Hero() {
               LinkedIn
             </a>
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>
-              Instagram
+              Github
             </a>
             <a href="https://dribbble.com" target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>
               Dribbble

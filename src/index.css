@@ -45,22 +45,46 @@ html, body {
     padding-right: 0 !important;
     align-items: flex-start !important;
     text-align: left !important;
+    color: #fff !important;
   }
 
   .hero-eyebrow {
     font-size: clamp(0.65rem, 2.8vw, 0.8rem) !important;
     letter-spacing: 0.16em !important;
+    color: rgba(255, 255, 255, 0.88) !important;
   }
 
   .hero-headline {
     font-size: clamp(1.45rem, 5.8vw, 2.05rem) !important;
     line-height: 1.28 !important;
     letter-spacing: -0.03em !important;
+    color: #fff !important;
+  }
+
+  .hero-headline em {
+    color: #fff !important;
+  }
+
+  .hero-copy a {
+    color: rgba(255, 255, 255, 0.92) !important;
   }
 
   .hero-copy > div:last-child {
     margin-top: 1.75rem !important;
     font-size: clamp(0.85rem, 3.5vw, 0.95rem) !important;
+  }
+
+  .hero-falling-letter:not(.hero-falling-letter-o) {
+    color: #fff !important;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+  }
+
+  .hero-falling-letter-o {
+    color: rgb(78, 22, 22) !important;
+  }
+
+  .site-header nav a {
+    color: rgba(255, 255, 255, 0.95) !important;
   }
 }
 

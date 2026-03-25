@@ -29,6 +29,7 @@ export default function Header({ light = false }) {
   const navColor = "#000000"
   return (
     <header
+      className="site-header"
       style={{
         position: "fixed",
         top: 0,

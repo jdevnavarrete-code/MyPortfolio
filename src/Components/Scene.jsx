@@ -2,11 +2,11 @@ import { useRef, useEffect, useState, useCallback } from "react"
 
 import video1 from "../assets/videos/project7.mp4"
 import video2 from "../assets/videos/project3.mp4"
-import video3 from "../assets/videos/project6.mp4"
 import video4 from "../assets/videos/project5.mp4"
+import ecuaflowersStill from "../assets/iamges/ecuaflowers.jpg"
 
 export const CARDS_DATA = [
-  { video: video3, title: "ECUAFLOWERS APP ↗", role: "Front-end & Motion Developer", context: "Agency", stack: "React, Three.js, GSAP", year: "2024" },
+  { image: ecuaflowersStill, title: "ECUAFLOWERS APP ↗", role: "Front-end & Motion Developer", context: "Agency", stack: "React, Three.js, GSAP", year: "2024" },
   { video: video2, title: "FARMAWEB UTPL ↗", role: "Front-end & Back-end Developer", context: "Freelance", stack: "Wordpress", year: "2022" },
   { video: video1, title: "PREPAGADO HYUNDAI ↗", role: "Creative Developer", context: "In-house", stack: "Next.js, Framer Motion", year: "2023" },
   { video: video4, title: "EMERGENCY APP ↗", role: "Full-stack Developer", context: "Startup", stack: "React, Node.js", year: "2024" },
@@ -131,13 +131,21 @@ export default function Scene() {
 
   useEffect(() => {
     const v = videoRef.current
-    if (!v) return
     if (!sectionVisible || hoverIndex === null) {
-      v.pause()
+      if (v) v.pause()
       return
     }
     const item = CARDS_DATA[hoverIndex]
     if (!item) return
+    if (item.image) {
+      if (v) {
+        v.pause()
+        v.removeAttribute("src")
+        v.load()
+      }
+      return
+    }
+    if (!v || !item.video) return
     v.src = item.video
     v.load()
     const play = () => v.play().catch(() => {})
@@ -224,19 +232,33 @@ export default function Scene() {
               boxShadow: videoVisible ? "0 28px 90px rgba(0, 0, 0, 0.45)" : "none",
             }}
           >
-            <video
-              ref={videoRef}
-              muted
-              loop
-              playsInline
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                display: "block",
-                opacity: 1,
-              }}
-            />
+            {hoveredProject?.image ? (
+              <img
+                src={hoveredProject.image}
+                alt="ECUAFLOWERS app mobile mockup"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                  opacity: 1,
+                }}
+              />
+            ) : (
+              <video
+                ref={videoRef}
+                muted
+                loop
+                playsInline
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                  opacity: 1,
+                }}
+              />
+            )}
           </div>
           {/* Capa a todo el ancho para alinear con la fila; el texto hace difference con el vídeo (centro) y con lo que hay detrás (laterales) */}
           {videoVisible && hoveredProject && (
