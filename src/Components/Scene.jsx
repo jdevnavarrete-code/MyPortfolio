@@ -47,6 +47,8 @@ export default function Scene() {
   const pointerRef = useRef({ x: 0, y: 0, has: false })
   const [hoverIndex, setHoverIndex] = useState(null)
   const [sectionVisible, setSectionVisible] = useState(false)
+
+  const isSceneMobile = () => typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches
   /** Centro vertical (viewport px) de la fila con hover: el vídeo se alinea ahí */
   const [videoCenterY, setVideoCenterY] = useState(null)
 
@@ -75,6 +77,36 @@ export default function Scene() {
     setHoverIndex((prev) => (prev === hit ? prev : hit))
   }, [sectionVisible])
 
+  /** Móvil / touch: sin mousemove el puntero nunca se marca; la fila activa sigue el centro del viewport al hacer scroll */
+  const pickRowAtViewportFocus = useCallback(() => {
+    if (!sectionVisible) {
+      setHoverIndex((p) => (p === null ? p : null))
+      return
+    }
+    const vh = window.innerHeight || 1
+    const focusY = vh * 0.38
+    let contained = null
+    let bestIdx = null
+    let bestDist = Infinity
+    for (let i = 0; i < CARDS_DATA.length; i++) {
+      const el = rowRefs.current[i]
+      if (!el) continue
+      const r = el.getBoundingClientRect()
+      if (focusY >= r.top && focusY <= r.bottom) {
+        contained = i
+        break
+      }
+      const mid = (r.top + r.bottom) / 2
+      const d = Math.abs(mid - focusY)
+      if (d < bestDist) {
+        bestDist = d
+        bestIdx = i
+      }
+    }
+    const hit = contained != null ? contained : bestIdx
+    setHoverIndex((prev) => (prev === hit ? prev : hit))
+  }, [sectionVisible])
+
   useEffect(() => {
     const el = sectionRef.current
     if (!el) return
@@ -85,9 +117,12 @@ export default function Scene() {
         if (!entry) return
         const r = entry.boundingClientRect
         const vh = window.innerHeight || 1
-        const hasEnoughOfSection = entry.intersectionRatio >= 0.12
+        const mobile = window.matchMedia("(max-width: 768px)").matches
+        const hasEnoughOfSection = mobile
+          ? entry.intersectionRatio >= 0.06
+          : entry.intersectionRatio >= 0.12
         /** El borde superior de Scene ya ha subido lo suficiente (no solo el pie de la sección asomando) */
-        const sectionHasStarted = r.top < vh * 0.7
+        const sectionHasStarted = mobile ? r.top < vh * 0.88 : r.top < vh * 0.7
         setSectionVisible(
           entry.isIntersecting && hasEnoughOfSection && sectionHasStarted
         )
@@ -106,7 +141,11 @@ export default function Scene() {
       ticking = true
       requestAnimationFrame(() => {
         ticking = false
-        pickRowUnderPointer()
+        if (window.matchMedia("(max-width: 768px)").matches) {
+          pickRowAtViewportFocus()
+        } else {
+          pickRowUnderPointer()
+        }
       })
     }
     const onMove = (e) => {
@@ -115,19 +154,27 @@ export default function Scene() {
     }
     window.addEventListener("mousemove", onMove, { passive: true })
     window.addEventListener("scroll", schedulePick, { passive: true, capture: true })
+    window.addEventListener("resize", schedulePick, { passive: true })
     return () => {
       window.removeEventListener("mousemove", onMove)
       window.removeEventListener("scroll", schedulePick, { capture: true })
+      window.removeEventListener("resize", schedulePick)
     }
-  }, [pickRowUnderPointer])
+  }, [pickRowUnderPointer, pickRowAtViewportFocus])
 
   useEffect(() => {
     if (!sectionVisible) return
     const id = requestAnimationFrame(() => {
-      requestAnimationFrame(pickRowUnderPointer)
+      requestAnimationFrame(() => {
+        if (window.matchMedia("(max-width: 768px)").matches) {
+          pickRowAtViewportFocus()
+        } else {
+          pickRowUnderPointer()
+        }
+      })
     })
     return () => cancelAnimationFrame(id)
-  }, [sectionVisible, pickRowUnderPointer])
+  }, [sectionVisible, pickRowUnderPointer, pickRowAtViewportFocus])
 
   useEffect(() => {
     const v = videoRef.current
@@ -181,6 +228,7 @@ export default function Scene() {
   return (
     <section
       ref={sectionRef}
+      className="scene-section"
       style={{
         position: "relative",
         width: "100%",
@@ -391,8 +439,10 @@ export default function Scene() {
         </div>
 
         <div
+          className="scene-rows-wrap"
           style={{ paddingTop: "clamp(1.5rem, 5vh, 3rem)" }}
           onMouseLeave={() => {
+            if (isSceneMobile()) return
             pointerRef.current = { ...pointerRef.current, has: false }
             setHoverIndex(null)
           }}
@@ -404,6 +454,7 @@ export default function Scene() {
             <div
               key={item.title}
               ref={(el) => { rowRefs.current[i] = el }}
+              className="scene-project-row"
               style={{
                 width: "100%",
                 borderTop: i === 0 ? `1px solid ${SCENE_LINE}` : undefined,
@@ -442,6 +493,7 @@ export default function Scene() {
             </div>
           )
         })}
+          <div className="scene-mobile-scroll-pad" aria-hidden />
         </div>
       </div>
     </section>

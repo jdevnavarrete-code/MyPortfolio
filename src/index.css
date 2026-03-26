@@ -88,6 +88,23 @@ html, body {
   }
 }
 
+/* Scene: móvil — multimedia sigue el scroll (sin hover de ratón) y más recorrido vertical */
+@media (max-width: 768px) {
+  .scene-section {
+    padding-bottom: clamp(9rem, 34vh, 20rem);
+  }
+
+  .scene-project-row {
+    min-height: clamp(5rem, 16vw, 7rem);
+  }
+
+  .scene-mobile-scroll-pad {
+    height: min(40vh, 360px);
+    min-height: 200px;
+    pointer-events: none;
+  }
+}
+
 /* About: vídeo flower — pulso suave de opacidad */
 @keyframes about-flower-opacity {
   0%,
