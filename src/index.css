@@ -95,13 +95,29 @@ html, body {
   }
 
   .scene-project-row {
-    min-height: clamp(5rem, 16vw, 7rem);
+    min-height: clamp(3.75rem, 11vw, 5.25rem);
+  }
+
+  .scene-project-row > div {
+    padding: clamp(0.45rem, 1.1vh, 0.65rem) clamp(0.5rem, 3.5vw, 0.9rem)
+      clamp(0.55rem, 1.8vh, 0.85rem) !important;
+  }
+
+  .scene-project-row a {
+    font-size: clamp(1.4rem, 3.5vw, 1.5rem) !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1.18 !important;
   }
 
   .scene-mobile-scroll-pad {
     height: min(40vh, 360px);
     min-height: 200px;
     pointer-events: none;
+  }
+
+  .scene-intro-hero {
+    padding-left: clamp(0.15rem, 2vw, 0.15rem) !important;
+    padding-right: clamp(0.15rem, 2vw, 0.15rem) !important;
   }
 }
 

@@ -393,6 +393,7 @@ export default function Scene() {
       >
         {/* Hero 100vh: título + Stage/Current arriba; descripción justo debajo; hueco flexible abajo */}
         <div
+          className="scene-intro-hero"
           style={{
             minHeight: "100vh",
             display: "flex",
