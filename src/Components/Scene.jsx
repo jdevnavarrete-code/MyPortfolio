@@ -77,33 +77,58 @@ export default function Scene() {
     setHoverIndex((prev) => (prev === hit ? prev : hit))
   }, [sectionVisible])
 
-  /** Móvil / touch: sin mousemove el puntero nunca se marca; la fila activa sigue el centro del viewport al hacer scroll */
+  /** Móvil / touch: solo texto hasta que el scroll sitúe el foco en la lista; entonces multimedia por fila (como hover en desktop) */
   const pickRowAtViewportFocus = useCallback(() => {
-    if (!sectionVisible) {
+    const sectionEl = sectionRef.current
+    const vh = window.innerHeight || 1
+    if (!sectionEl || !sectionVisible) {
       setHoverIndex((p) => (p === null ? p : null))
       return
     }
-    const vh = window.innerHeight || 1
-    const focusY = vh * 0.38
-    let contained = null
-    let bestIdx = null
-    let bestDist = Infinity
-    for (let i = 0; i < CARDS_DATA.length; i++) {
-      const el = rowRefs.current[i]
-      if (!el) continue
-      const r = el.getBoundingClientRect()
-      if (focusY >= r.top && focusY <= r.bottom) {
-        contained = i
-        break
-      }
-      const mid = (r.top + r.bottom) / 2
-      const d = Math.abs(mid - focusY)
-      if (d < bestDist) {
-        bestDist = d
-        bestIdx = i
-      }
+    const sr = sectionEl.getBoundingClientRect()
+    /** Fuera de la sección: no mostrar overlay */
+    if (sr.bottom <= vh * 0.02 || sr.top >= vh * 0.98) {
+      setHoverIndex(null)
+      return
     }
-    const hit = contained != null ? contained : bestIdx
+
+    const focusY = vh * 0.4
+    const firstEl = rowRefs.current[0]
+    const lastEl = rowRefs.current[CARDS_DATA.length - 1]
+    if (!firstEl || !lastEl) return
+
+    const firstR = firstEl.getBoundingClientRect()
+    const lastR = lastEl.getBoundingClientRect()
+
+    let hit = null
+    /** Intro (FEATURED + copy): mismas filas de texto visibles, sin overlay de multimedia */
+    if (focusY < firstR.top) {
+      hit = null
+    } else if (focusY > lastR.bottom) {
+      /** Ya pasó la lista: ocultar como al salir del hover en desktop */
+      hit = null
+    } else {
+      let contained = null
+      let bestIdx = null
+      let bestDist = Infinity
+      for (let i = 0; i < CARDS_DATA.length; i++) {
+        const el = rowRefs.current[i]
+        if (!el) continue
+        const r = el.getBoundingClientRect()
+        if (focusY >= r.top && focusY <= r.bottom) {
+          contained = i
+          break
+        }
+        const mid = (r.top + r.bottom) / 2
+        const d = Math.abs(mid - focusY)
+        if (d < bestDist) {
+          bestDist = d
+          bestIdx = i
+        }
+      }
+      hit = contained != null ? contained : bestIdx
+    }
+
     setHoverIndex((prev) => (prev === hit ? prev : hit))
   }, [sectionVisible])
 
@@ -112,22 +137,32 @@ export default function Scene() {
     if (!el) return
     /** El vídeo no aparece con un borde mínimo de Scene: hace falta que la sección haya entrado de verdad en vista */
     const THRESHOLDS = [0, 0.05, 0.1, 0.12, 0.15, 0.2, 0.3, 0.45, 0.6, 0.75, 1]
+    const observerOpts =
+      window.matchMedia("(max-width: 768px)").matches
+        ? { threshold: THRESHOLDS, rootMargin: "80px 0px" }
+        : { threshold: THRESHOLDS }
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (!entry) return
         const r = entry.boundingClientRect
         const vh = window.innerHeight || 1
         const mobile = window.matchMedia("(max-width: 768px)").matches
-        const hasEnoughOfSection = mobile
-          ? entry.intersectionRatio >= 0.06
-          : entry.intersectionRatio >= 0.12
-        /** El borde superior de Scene ya ha subido lo suficiente (no solo el pie de la sección asomando) */
-        const sectionHasStarted = mobile ? r.top < vh * 0.88 : r.top < vh * 0.7
-        setSectionVisible(
-          entry.isIntersecting && hasEnoughOfSection && sectionHasStarted
-        )
+        if (mobile) {
+          /** Móvil: basta con solape real con el viewport (la ratio a menudo mantiene la sección “invisible”) */
+          setSectionVisible(
+            entry.isIntersecting &&
+              r.bottom > vh * 0.03 &&
+              r.top < vh * 0.97
+          )
+        } else {
+          const hasEnoughOfSection = entry.intersectionRatio >= 0.12
+          const sectionHasStarted = r.top < vh * 0.7
+          setSectionVisible(
+            entry.isIntersecting && hasEnoughOfSection && sectionHasStarted
+          )
+        }
       },
-      { threshold: THRESHOLDS }
+      observerOpts
     )
     obs.observe(el)
     return () => obs.disconnect()
