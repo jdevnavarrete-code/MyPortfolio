@@ -4,9 +4,11 @@ import video1 from "../assets/videos/project7.mp4"
 import video2 from "../assets/videos/project3.mp4"
 import video4 from "../assets/videos/project5.mp4"
 import ecuaflowersStill from "../assets/iamges/ecuaflowers.jpg"
+import minAppStill from "../assets/iamges/MIndApp.jpg"
 
 export const CARDS_DATA = [
   { image: ecuaflowersStill, title: "ECUAFLOWERS APP ↗", role: "Front-end & Motion Developer", context: "Agency", stack: "React, Three.js, GSAP", year: "2024" },
+  { image: minAppStill, title: "MIND APP ↗", role: "Product & UI Developer", context: "Product", stack: "React Native", year: "2024" },
   { video: video2, title: "FARMAWEB UTPL ↗", role: "Front-end & Back-end Developer", context: "Freelance", stack: "Wordpress", year: "2022" },
   { video: video1, title: "PREPAGADO HYUNDAI ↗", role: "Creative Developer", context: "In-house", stack: "Next.js, Framer Motion", year: "2023" },
   { video: video4, title: "EMERGENCY APP ↗", role: "Full-stack Developer", context: "Startup", stack: "React, Node.js", year: "2024" },
@@ -318,7 +320,7 @@ export default function Scene() {
             {hoveredProject?.image ? (
               <img
                 src={hoveredProject.image}
-                alt="ECUAFLOWERS app mobile mockup"
+                alt={`${hoveredProject.title.replace(/\s*↗\s*$/, "")} — preview`}
                 style={{
                   width: "100%",
                   height: "100%",
