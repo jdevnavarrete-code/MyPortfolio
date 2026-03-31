@@ -26,7 +26,7 @@ const NAV_LINKS = [
 // }
 
 export default function Header({ light = false }) {
-  const navColor = "#000000"
+  const navColor = "#ffffff"
   return (
     <header
       className="site-header"

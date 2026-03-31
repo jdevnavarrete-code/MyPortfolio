@@ -1,21 +1,23 @@
 import { useRef, useEffect, useState, useCallback } from "react"
 
 import video1 from "../assets/videos/project7.mp4"
-import video2 from "../assets/videos/project3.mp4"
-import video4 from "../assets/videos/project5.mp4"
+import farmaWebStill from "../assets/iamges/FarmaWeb.jpg"
 import ecuaflowersStill from "../assets/iamges/ecuaflowers.jpg"
 import minAppStill from "../assets/iamges/MIndApp.jpg"
+import emergencyAppStill from "../assets/iamges/emergencyApp.jpg"
+import VenusStill from "../assets/iamges/Venus.jpg"
 
 export const CARDS_DATA = [
   { image: ecuaflowersStill, title: "ECUAFLOWERS APP ↗", role: "Front-end & Motion Developer", context: "Agency", stack: "React, Three.js, GSAP", year: "2024" },
   { image: minAppStill, title: "MIND APP ↗", role: "Product & UI Developer", context: "Product", stack: "React Native", year: "2024" },
-  { video: video2, title: "FARMAWEB UTPL ↗", role: "Front-end & Back-end Developer", context: "Freelance", stack: "Wordpress", year: "2022" },
+  { image: emergencyAppStill, title: "EMERGENCY APP ↗", role: "Full-stack Developer", context: "Startup", stack: "React, Node.js", year: "2024" },
+  { image: farmaWebStill, title: "FARMAWEB UTPL ↗", role: "Front-end & Back-end Developer", context: "Freelance", stack: "Wordpress", year: "2022" },
+  { image: VenusStill, title: "FINANCE APP ↗", role: "Front-end & Motion Developer", context: "Agency", stack: "React, Three.js, GSAP", year: "2024" },
   { video: video1, title: "PREPAGADO HYUNDAI ↗", role: "Creative Developer", context: "In-house", stack: "Next.js, Framer Motion", year: "2023" },
-  { video: video4, title: "EMERGENCY APP ↗", role: "Full-stack Developer", context: "Startup", stack: "React, Node.js", year: "2024" },
+  
 ]
 
-/** Referencia: fondo granate, texto dorado pálido, líneas finas */
-export const SCENE_BG = "#4e1616"
+/** Fondo Scene: negro #000 en CSS (.scene-section). Líneas / acento */
 const SCENE_LINE = "rgb(198, 165, 106)"
 
 /** Misma tipografía en lista y overlay (mayúsculas como la referencia) */
@@ -41,7 +43,7 @@ const SECTION_HEADING_TYPO = {
   fontSize: "clamp(3.5rem, 14vw, 10.5rem)",
 }
 
-export default function Scene() {
+export default function Scene({ followsKeySkills = false } = {}) {
   const sectionRef = useRef(null)
   const rowRefs = useRef([])
   const videoRef = useRef(null)
@@ -270,9 +272,10 @@ export default function Scene() {
         position: "relative",
         width: "100%",
         minHeight: "100vh",
-        backgroundColor: SCENE_BG,
         fontFamily: "Inter, Arial, sans-serif",
-        paddingTop: "clamp(7rem, 28vh, 16rem)",
+        paddingTop: followsKeySkills
+          ? "clamp(2rem, 6vh, 4rem)"
+          : "clamp(7rem, 28vh, 16rem)",
         paddingBottom: "clamp(7rem, 28vh, 16rem)",
         paddingLeft: "clamp(1.5rem, 5vw, 1.5rem)",
         paddingRight: "clamp(1.5rem, 5vw, 1.5rem)",

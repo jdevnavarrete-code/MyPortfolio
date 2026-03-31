@@ -1,6 +1,7 @@
 import Hero from "../Components/Hero"
 import About from "../Components/About"
-import Scene, { SCENE_BG } from "../Components/Scene"
+import KeySkills from "../Components/KeySkills"
+import Scene from "../Components/Scene"
 import Contact from "../Components/Contact"
 
 export default function HomePage() {
@@ -8,9 +9,12 @@ export default function HomePage() {
     <div style={{ background: "#000" }}>
       <Hero />
       <About />
-      <div style={{ height: "24vh" }} />
-      <div id="work" style={{ position: "relative", zIndex: 20, background: SCENE_BG }}>
-        <Scene />
+      <KeySkills />
+      <div
+        id="work"
+        style={{ position: "relative", zIndex: 20, background: "#000000" }}
+      >
+        <Scene followsKeySkills />
       </div>
       {/* Sin margen negativo: evita que Contact suba bajo Scene (z-index 20) y tape el título */}
       <Contact />

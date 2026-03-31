@@ -4,9 +4,8 @@ import Header from "./Header"
 import bannerBg from "../assets/iamges/banner1.jpeg"
 
 const CREAM = "#000000"
-const DARK = "#000000"
 
-const LETTERS = "JORDY".split("")
+const LETTERS = "jordy".split("")
 const SCALES = [1.14, 0.98, 1.08, 1.02, 1.16]
 
 function FallingLetters() {
@@ -134,13 +133,16 @@ function FallingLetters() {
         <span
           key={i}
           ref={(el) => { letterRefs.current[i] = el }}
-          className={letter === "O" ? "hero-falling-letter hero-falling-letter-o" : "hero-falling-letter"}
+          className={letter === "o" ? "hero-falling-letter hero-falling-letter-o" : "hero-falling-letter"}
           style={{
             position: "absolute",
             top: -9999,
             left: -9999,
+            fontFamily: '"Times New Roman", Times, serif',
+            fontStyle: "italic",
+            fontWeight: 400,
             fontSize: "clamp(10rem, 22vw, 28rem)",
-            color: letter === "O" ? "rgb(78, 22, 22)" : "#221F20",
+            color: letter === "o" ? "#a01010" : "#ffffff",
             lineHeight: 1,
             transformOrigin: "center center",
             textShadow: "0 2px 20px rgba(0,0,0,0.06)",
@@ -181,11 +183,11 @@ export default function Hero() {
   }, [])
 
   const socialLinkStyle = {
-    color: DARK,
+    color: "#ffffff",
     textDecoration: "underline",
     textDecorationThickness: "1px",
     textUnderlineOffset: "0.2em",
-    opacity: 0.85,
+    opacity: 0.9,
   }
 
   return (
@@ -265,10 +267,10 @@ export default function Hero() {
               margin: 0,
               fontFamily: "Times New Roman, Times, serif",
               fontSize: "clamp(0.75rem, 1.2vw, 0.9rem)",
-              color: DARK,
+              color: "rgba(255, 255, 255, 0.82)",
               letterSpacing: "0.2em",
               textTransform: "uppercase",
-              opacity: 0.7,
+              opacity: 0.95,
             }}
           >
             (i am)
@@ -280,7 +282,7 @@ export default function Hero() {
               fontFamily: "Arial, sans-serif",
               fontSize: "clamp(4rem, 4.5vw, 5rem)",
               fontWeight: 400,
-              color: DARK,
+              color: "#ffffff",
               lineHeight: 1.2,
               letterSpacing: "-0.02em",
             }}
@@ -297,7 +299,7 @@ export default function Hero() {
               fontSize: "clamp(0.9rem, 1.2vw, 1rem)",
             }}
           >
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>
+            <a href="linkedin.com/in/jordy-navarrete-590831264" target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>
               LinkedIn
             </a>
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>

@@ -1,6 +1,53 @@
 :root {
   /* Ajusta el valor si lo defines en otro tema / Webflow */
   --_offbeat---color-accent-main: #c3a677;
+  /* Base roja (Scene / envoltorios): carmesí iluminado a la izq. → rojo oscuro a la dcha. (ref. ~#a01010 → #400000) */
+  --portfolio-red-radial-bg:
+    radial-gradient(
+      ellipse 90% 120% at 22% 50%,
+      rgba(255, 90, 90, 0.38) 0%,
+      rgba(180, 24, 28, 0.2) 38%,
+      transparent 58%
+    ),
+    linear-gradient(
+      to right,
+      #c4181c 0%,
+      #a01010 28%,
+      #820e12 52%,
+      #580a0c 76%,
+      #380608 100%
+    );
+  /* Borde superior/inferior: negro opaco → funde (About foto + columna roja Key skills) */
+  --portfolio-edge-fade-top: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 7%,
+    rgba(0, 0, 0, 0.88) 16%,
+    rgba(0, 0, 0, 0.42) 30%,
+    rgba(0, 0, 0, 0.08) 42%,
+    transparent 52%
+  );
+  --portfolio-edge-fade-bottom: linear-gradient(
+    to top,
+    #000 0%,
+    #000 7%,
+    rgba(0, 0, 0, 0.88) 16%,
+    rgba(0, 0, 0, 0.42) 30%,
+    rgba(0, 0, 0, 0.08) 42%,
+    transparent 52%
+  );
+  /* Key skills · vídeo flor: solo borde izq. → negro (misma curva que arriba/abajo) */
+  --portfolio-edge-fade-left: linear-gradient(
+    to right,
+    #000 0%,
+    #000 7%,
+    rgba(0, 0, 0, 0.88) 16%,
+    rgba(0, 0, 0, 0.42) 30%,
+    rgba(0, 0, 0, 0.08) 42%,
+    transparent 52%
+  );
+  --portfolio-red-stack-bg: var(--portfolio-edge-fade-top), var(--portfolio-edge-fade-bottom),
+    var(--portfolio-red-radial-bg);
 }
 
 * {
@@ -80,12 +127,17 @@ html, body {
   }
 
   .hero-falling-letter-o {
-    color: rgb(78, 22, 22) !important;
+    color: #a01010 !important;
   }
 
   .site-header nav a {
     color: rgba(255, 255, 255, 0.95) !important;
   }
+}
+
+/* Scene — fondo negro puro */
+.scene-section {
+  background: #000000;
 }
 
 /* Scene: móvil — multimedia sigue el scroll (sin hover de ratón) y más recorrido vertical */
@@ -121,6 +173,176 @@ html, body {
   }
 }
 
+/* Key skills — sección partida al 50%: izq. negro #000 · der. degradado rojo */
+.key-skills-section {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(12rem, 36vh, 26rem) clamp(1.25rem, 5vw, 3rem) clamp(12rem, 36vh, 26rem);
+  font-family: Inter, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+.key-skills-section::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 50%;
+  background: #000000;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.key-skills-section::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 50%;
+  width: 50%;
+  background: var(--portfolio-red-stack-bg);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.key-skills-inner {
+  position: relative;
+  z-index: 1;
+  max-width: min(1200px, 100%);
+  margin: 0 auto;
+}
+
+.key-skills-eyebrow {
+  margin: 0 0 clamp(1.5rem, 3vh, 2.25rem);
+  text-align: center;
+  font-size: clamp(0.72rem, 1.5vw, 0.82rem);
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 400;
+}
+
+.key-skills-heading-wrap {
+  margin: 0 0 clamp(2.5rem, 8vh, 4.5rem);
+  text-align: center;
+  width: 100%;
+}
+
+.key-skills-heading-wrap > span:first-of-type {
+  margin-bottom: clamp(0.35rem, 2vw, 0.65rem);
+}
+
+.key-skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  align-items: stretch;
+}
+
+.key-skills-media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 68vh;
+  min-height: min(48vh, 400px);
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.key-skills-media .key-skills-flower-video {
+  display: block;
+  width: 100%;
+  height: 68vh;
+  object-fit: cover;
+  object-position: left center;
+  mix-blend-mode: screen;
+}
+
+.key-skills-panel {
+  min-width: 0;
+  align-self: stretch;
+  box-sizing: border-box;
+  padding: clamp(0.5rem, 2vw, 1rem);
+}
+
+.key-skills-topics {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.25rem, 5.5vh, 3.75rem);
+}
+
+.key-skills-topic-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+  gap: clamp(1.25rem, 4vw, 2.5rem);
+  align-items: start;
+}
+
+.key-skills-topic-label {
+  margin: 0;
+  padding-top: 0.15em;
+  text-align: right;
+  font-family: "Times New Roman", Times, serif;
+  font-style: italic;
+  font-size: clamp(1.38rem, 3.1vw, 1.95rem);
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+}
+
+.key-skills-modules {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.key-skills-modules li {
+  font-family: Inter, Arial, sans-serif;
+  font-size: clamp(1.05rem, 2.35vw, 1.42rem);
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.96);
+  padding: 0.2rem 0;
+}
+
+@media (max-width: 768px) {
+  .key-skills-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .key-skills-panel {
+    padding: clamp(1.5rem, 5vw, 2rem) clamp(1rem, 4vw, 1.5rem);
+  }
+
+  .key-skills-heading-wrap {
+    margin-bottom: clamp(2rem, 6vh, 3rem);
+  }
+
+  .key-skills-topic-row {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .key-skills-topic-label {
+    text-align: left;
+    padding-top: 0;
+  }
+
+  .key-skills-media {
+    height: auto;
+    min-height: min(48vh, 400px);
+  }
+
+  .key-skills-media .key-skills-flower-video {
+    width: 100%;
+    height: 68vh;
+    max-height: min(68vh, 520px);
+    min-height: min(48vh, 400px);
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
 /* About: vídeo flower — pulso suave de opacidad */
 @keyframes about-flower-opacity {
   0%,
@@ -132,12 +354,14 @@ html, body {
   }
 }
 
-.about-flower-video {
+.about-flower-video,
+.key-skills-flower-video {
   animation: about-flower-opacity 6s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .about-flower-video {
+  .about-flower-video,
+  .key-skills-flower-video {
     animation: none;
     opacity: 0.9;
   }
@@ -182,7 +406,7 @@ html, body {
     max-width: none !important;
     flex: none !important;
     height: auto !important;
-    min-height: min(48vh, 400px);
+    min-height: 0;
     margin-left: 0 !important;
     margin-right: 0 !important;
     z-index: 0;
@@ -192,11 +416,11 @@ html, body {
 
   .about-flower-media .about-flower-video {
     width: 100% !important;
-    height: 68vh !important;
-    max-height: min(68vh, 520px);
-    min-height: min(48vh, 400px);
-    object-fit: cover;
-    object-position: center center;
+    height: auto !important;
+    max-height: none;
+    min-height: 0;
+    object-fit: unset;
+    object-position: left top;
   }
 
   .about-flower-copy {

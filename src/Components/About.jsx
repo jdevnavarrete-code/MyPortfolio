@@ -1,110 +1,6 @@
 import { useRef, useEffect, useState } from "react"
-import flowerVideo from "../assets/videos/flower.mp4"
-
-const FOCUS_LINE_RATIO = 0.38
-const TRANSITION_ZONE = 240
-const MAX_BLUR = 20
-const TRANSLATE_Y_OFFSET = 14
-
-const EASE = "cubic-bezier(0.22, 1, 0.36, 1)"
-const FADE_ZONE = 18
-const TRANSITION = `filter 0.22s ${EASE}, opacity 0.22s ${EASE}, transform 0.22s ${EASE}, mask 0.22s ${EASE}, -webkit-mask 0.22s ${EASE}`
-const VIDEO_SCROLL_START_OFFSET_VH = 0.15
-const VIDEO_MIN_RANGE_VH = 0.0
-
-function ScrollRevealLine({
-  children,
-  alwaysSharp = false,
-  style = {},
-  nowrap = true,
-  onProgressChange,
-  /** Bloque del cierre del quote: justificado, última línea pegada a la derecha */
-  endAlign = false,
-}) {
-  const lineRef = useRef(null)
-  const [progress, setProgress] = useState(0)
-
-  useEffect(() => {
-    const el = lineRef.current
-    if (!el) return
-    const update = () => {
-      const rect = el.getBoundingClientRect()
-      const lineCenter = rect.top + rect.height / 2
-      const focusLine = window.innerHeight * FOCUS_LINE_RATIO
-
-      let p
-      if (alwaysSharp || lineCenter <= focusLine) {
-        p = 1
-      } else {
-        const distanceBelow = lineCenter - focusLine
-        p = Math.max(0, 1 - distanceBelow / TRANSITION_ZONE)
-      }
-      setProgress(p)
-      onProgressChange?.(p)
-    }
-    update()
-    window.addEventListener("scroll", update, { passive: true })
-    window.addEventListener("resize", update)
-    return () => {
-      window.removeEventListener("scroll", update)
-      window.removeEventListener("resize", update)
-    }
-  }, [alwaysSharp, onProgressChange])
-
-  const blur = MAX_BLUR * (1 - progress)
-  const opacity = progress
-  const translateY = TRANSLATE_Y_OFFSET * (1 - progress)
-  const edge = progress * 100
-  const fadeStart = Math.max(0, edge - FADE_ZONE)
-  const fadeEnd = Math.min(100, edge + FADE_ZONE)
-  /* Misma máscara para todas las líneas (incl. endAlign): revelado izquierda → derecha */
-  const maskImage =
-    progress <= 0.01
-      ? "linear-gradient(to right, transparent 0%, transparent 100%)"
-      : progress >= 0.99
-        ? "linear-gradient(to right, black 0%, black 100%)"
-        : `linear-gradient(to right, black 0%, black ${fadeStart}%, transparent ${fadeEnd}%)`
-  const webkitMaskImage = maskImage
-
-  return (
-    <span
-      ref={lineRef}
-      style={{
-        display: "block",
-        width: "100%",
-        textAlign: endAlign ? "justify" : "left",
-      }}
-    >
-      <span
-        style={{
-          /* block + 100% cuando hay salto de línea (nowrap false) o alineación derecha */
-          display: endAlign || !nowrap ? "block" : "inline-block",
-          width: endAlign || !nowrap ? "100%" : undefined,
-          maxWidth: "100%",
-          textAlign: endAlign ? "justify" : "left",
-          textAlignLast: endAlign ? "right" : undefined,
-          boxSizing: "border-box",
-          WebkitMaskImage: webkitMaskImage,
-          WebkitMaskSize: "100% 100%",
-          WebkitMaskRepeat: "no-repeat",
-          WebkitMaskPosition: "0 0",
-          maskImage,
-          maskSize: "100% 100%",
-          maskRepeat: "no-repeat",
-          maskPosition: "0 0",
-          filter: `blur(${blur}px)`,
-          opacity,
-          transform: `translateY(${translateY}px)`,
-          transition: TRANSITION,
-          whiteSpace: nowrap ? "nowrap" : "normal",
-          ...style,
-        }}
-      >
-        {children}
-      </span>
-    </span>
-  )
-}
+import jordyPhoto from "../assets/iamges/test1.jpg"
+import ScrollRevealLine from "./ScrollRevealLine"
 
 function BioParagraph({ visible = false }) {
   return (
@@ -143,7 +39,6 @@ function BioParagraph({ visible = false }) {
 }
 
 export default function About() {
-  const flowerVideoRef = useRef(null)
   const aboutRef = useRef(null)
   const [quoteRevealed, setQuoteRevealed] = useState(false)
   const [isMobileLayout, setIsMobileLayout] = useState(() =>
@@ -156,59 +51,6 @@ export default function About() {
     sync()
     mq.addEventListener("change", sync)
     return () => mq.removeEventListener("change", sync)
-  }, [])
-
-  // Scrub del vídeo con scroll normal (sin bloquear ni agregar espacio extra)
-  useEffect(() => {
-    const video = flowerVideoRef.current
-    const about = aboutRef.current
-    if (!video || !about) return
-    let isSeeking = false
-    let pendingTime = null
-
-    const seekTo = (time) => {
-      if (isSeeking) { pendingTime = time; return }
-      isSeeking = true
-      video.currentTime = time
-    }
-
-    const onSeeked = () => {
-      isSeeking = false
-      if (pendingTime !== null) {
-        const t = pendingTime
-        pendingTime = null
-        seekTo(t)
-      }
-    }
-
-    const onScroll = () => {
-      if (!video.duration || isNaN(video.duration)) return
-      const vh = window.innerHeight
-      const aboutTop = about.offsetTop
-      const scrollY = window.scrollY
-      const start = aboutTop - vh * VIDEO_SCROLL_START_OFFSET_VH
-      // Usa la altura real de About para asegurar que el video pueda completar sin espacio extra.
-      const sectionRange = Math.max(1, about.offsetHeight - vh * 0.35)
-      const minRange = vh * VIDEO_MIN_RANGE_VH
-      const range = Math.max(minRange, sectionRange)
-      const linear = Math.min(1, Math.max(0, (scrollY - start) / range))
-      const smooth = linear * linear * (3 - 2 * linear) // smoothstep
-      seekTo(smooth * video.duration)
-    }
-
-    video.pause()
-    video.addEventListener("seeked", onSeeked)
-    video.addEventListener("loadedmetadata", onScroll)
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    window.addEventListener("resize", onScroll)
-    return () => {
-      video.removeEventListener("seeked", onSeeked)
-      video.removeEventListener("loadedmetadata", onScroll)
-      window.removeEventListener("scroll", onScroll)
-      window.removeEventListener("resize", onScroll)
-      video.pause()
-    }
   }, [])
 
   return (
@@ -259,7 +101,7 @@ export default function About() {
         </p>
       </div>
 
-      {/* Video + cierre quote + bio — móvil: cierre → flor → bio (order en CSS) */}
+      {/* Foto + cierre quote + bio — móvil: cierre → imagen → bio (order en CSS) */}
       <div
         className="about-flower-row"
         style={{
@@ -278,71 +120,43 @@ export default function About() {
           Tercer bloque del quote: fuera del vídeo para que el borde derecho coincida
           con la columna de la bio (pegado al layout), no solo al borde del vídeo.
         */}
-        {/* Flower video — desktop: columna izquierda; móvil: capa de fondo ancho completo */}
+        {/* Foto — desktop: columna izquierda; móvil: ancho completo */}
         <div
           className="about-flower-media"
           style={{
             flex: "0 0 52%",
             position: "relative",
-            height: "68vh",
+            height: "auto",
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-start",
             justifyContent: "flex-start",
             marginLeft: "clamp(-8rem, -22vw, -3rem)",
+            overflow: "hidden",
           }}
         >
-          <video
-            ref={flowerVideoRef}
+          <img
             className="about-flower-video"
-            src={flowerVideo}
-            playsInline
-            preload="auto"
+            src={jordyPhoto}
+            alt="Jordy"
+            draggable={false}
             style={{
               width: "100%",
-              height: "68vh",
-              objectFit: "cover",
-              objectPosition: "left center",
-              mixBlendMode: "screen",
+              height: "auto",
+              display: "block",
+              objectPosition: "center top",
             }}
           />
-          {/* Sombra degradada negra abajo del video */}
+          {/* Solo borde inferior: funde la foto con el negro (sin viñeta arriba) */}
           <div
+            className="about-photo-edge-fade"
             style={{
               position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: "45%",
-              background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.4) 35%, transparent 100%)",
+              inset: 0,
+              background: "var(--portfolio-edge-fade-bottom)",
               pointerEvents: "none",
               zIndex: 5,
             }}
-          />
-          {/* Sombra degradada negra arriba del video */}
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: "45%",
-              background: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.4) 35%, transparent 100%)",
-              pointerEvents: "none",
-              zIndex: 5,
-            }}
-          />
-          {/* Sombra degradada negra a la derecha del video */}
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              bottom: 0,
-              width: "35%",
-              background: "linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.4) 35%, transparent 100%)",
-              pointerEvents: "none",
-              zIndex: 5,
-            }}
+            aria-hidden
           />
         </div>
 
