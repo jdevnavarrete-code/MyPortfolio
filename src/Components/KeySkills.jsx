@@ -102,13 +102,15 @@ export default function KeySkills() {
       }
     }
 
-    const onScroll = () => {
+    let rafScheduled = false
+    const updateScrubFromScroll = () => {
       if (!video.duration || isNaN(video.duration)) return
-      const vh = window.innerHeight
-      const sectionTop = section.offsetTop
+      const vh = window.innerHeight || 1
       const scrollY = window.scrollY
+      const rect = section.getBoundingClientRect()
+      const sectionTop = scrollY + rect.top
       const start = sectionTop - vh * VIDEO_SCROLL_START_OFFSET_VH
-      const sectionRange = Math.max(1, section.offsetHeight - vh * 0.35)
+      const sectionRange = Math.max(1, rect.height - vh * 0.32)
       const minRange = vh * VIDEO_MIN_RANGE_VH
       const range = Math.max(minRange, sectionRange)
       const linear = Math.min(1, Math.max(0, (scrollY - start) / range))
@@ -116,17 +118,30 @@ export default function KeySkills() {
       seekTo(smooth * video.duration)
     }
 
+    const onScroll = () => {
+      if (rafScheduled) return
+      rafScheduled = true
+      requestAnimationFrame(() => {
+        rafScheduled = false
+        updateScrubFromScroll()
+      })
+    }
+
     video.pause()
     video.addEventListener("seeked", onSeeked)
     video.addEventListener("loadedmetadata", onScroll)
+    video.addEventListener("loadeddata", onScroll)
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
     window.addEventListener("resize", onScroll)
+    window.visualViewport?.addEventListener("scroll", onScroll, { passive: true })
     return () => {
       video.removeEventListener("seeked", onSeeked)
       video.removeEventListener("loadedmetadata", onScroll)
+      video.removeEventListener("loadeddata", onScroll)
       window.removeEventListener("scroll", onScroll)
       window.removeEventListener("resize", onScroll)
+      window.visualViewport?.removeEventListener("scroll", onScroll)
       video.pause()
     }
   }, [])
@@ -165,10 +180,11 @@ export default function KeySkills() {
               preload="auto"
               aria-label="Floral motion — scrubbed with scroll"
             />
-            <div style={FLOWER_GRADIENT_BOTTOM} aria-hidden />
-            <div style={FLOWER_GRADIENT_TOP} aria-hidden />
-            <div style={FLOWER_GRADIENT_RIGHT} aria-hidden />
+            <div className="key-skills-flower-vignette" style={FLOWER_GRADIENT_BOTTOM} aria-hidden />
+            <div className="key-skills-flower-vignette" style={FLOWER_GRADIENT_TOP} aria-hidden />
+            <div className="key-skills-flower-vignette" style={FLOWER_GRADIENT_RIGHT} aria-hidden />
             <div
+              className="key-skills-flower-vignette"
               style={{
                 position: "absolute",
                 inset: 0,

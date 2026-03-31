@@ -308,10 +308,56 @@ html, body {
   .key-skills-grid {
     grid-template-columns: 1fr;
     gap: 0;
+    position: relative;
+    isolation: isolate;
+    min-height: 0;
   }
 
+  .key-skills-flower-vignette {
+    display: none !important;
+  }
+
+  /* Todo el texto debajo de la franja del vídeo (misma altura que .key-skills-media) */
   .key-skills-panel {
-    padding: clamp(1.5rem, 5vw, 2rem) clamp(1rem, 4vw, 1.5rem);
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    padding: min(46vh, 400px) clamp(1rem, 4vw, 1.5rem) clamp(2rem, 6vw, 2.5rem);
+    box-sizing: border-box;
+  }
+
+  /* Vídeo detrás del panel: z-index bajo y sin mix-blend (screen hacía que flotara encima de la columna roja) */
+  .key-skills-media {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: min(46vh, 400px);
+    min-height: min(46vh, 400px);
+    max-height: min(46vh, 400px);
+    z-index: 0;
+    pointer-events: none;
+    isolation: isolate;
+    border-radius: 0;
+  }
+
+  /* Solo mitad izq. del vídeo: la derecha es transparente → un solo rojo (.key-skills-section::after) */
+  .key-skills-media .key-skills-flower-video {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+    object-fit: cover;
+    object-position: left center;
+    mix-blend-mode: normal !important;
+    clip-path: inset(0 50% 0 0);
+  }
+
+  .key-skills-topic-label,
+  .key-skills-modules li {
+    text-shadow: 0 1px 14px rgba(0, 0, 0, 0.65);
   }
 
   .key-skills-heading-wrap {
@@ -326,20 +372,6 @@ html, body {
   .key-skills-topic-label {
     text-align: left;
     padding-top: 0;
-  }
-
-  .key-skills-media {
-    height: auto;
-    min-height: min(48vh, 400px);
-  }
-
-  .key-skills-media .key-skills-flower-video {
-    width: 100%;
-    height: 68vh;
-    max-height: min(68vh, 520px);
-    min-height: min(48vh, 400px);
-    object-fit: cover;
-    object-position: center center;
   }
 }
 
