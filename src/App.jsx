@@ -1,10 +1,12 @@
 import { useEffect, useLayoutEffect, useRef } from "react"
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom"
+import Lenis from "lenis"
+import "lenis/dist/lenis.css"
 import HomePage from "./pages/HomePage"
 import WorkPage from "./pages/WorkPage"
 import CustomCursor from "./Components/CustomCursor"
 
-function ScrollToHash() {
+function ScrollToHash({ lenisRef }) {
   const { pathname, hash } = useLocation()
   const isInitialLoad = useRef(true)
 
@@ -14,7 +16,9 @@ function ScrollToHash() {
     }
 
     const scrollToTop = () => {
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" })
+      const lenis = lenisRef.current
+      if (lenis) lenis.scrollTo(0, { immediate: true })
+      else window.scrollTo({ top: 0, left: 0, behavior: "auto" })
     }
 
     // En carga inicial o recarga: siempre empezar arriba, ignorar hash
@@ -32,31 +36,57 @@ function ScrollToHash() {
       const el = document.getElementById(hash.slice(1))
       if (el) {
         requestAnimationFrame(() => {
-          el.scrollIntoView({ behavior: "smooth" })
+          const lenis = lenisRef.current
+          if (lenis) lenis.scrollTo(el, { offset: 0 })
+          else el.scrollIntoView({ behavior: "smooth" })
         })
       }
     } else {
       scrollToTop()
     }
-  }, [pathname, hash])
+  }, [pathname, hash, lenisRef])
 
   useEffect(() => {
-    const scrollToTop = () => {
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" })
+    const onPageShow = (e) => {
+      if (!e.persisted) return
+      const lenis = lenisRef.current
+      if (lenis) lenis.scrollTo(0, { immediate: true })
+      else window.scrollTo({ top: 0, left: 0, behavior: "auto" })
     }
-    window.addEventListener("pageshow", (e) => {
-      if (e.persisted) scrollToTop()
-    })
-    return () => window.removeEventListener("pageshow", scrollToTop)
-  }, [])
+    window.addEventListener("pageshow", onPageShow)
+    return () => window.removeEventListener("pageshow", onPageShow)
+  }, [lenisRef])
+
   return null
 }
 
 export default function App() {
+  const lenisRef = useRef(null)
+
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") return
+    if (!window.matchMedia("(prefers-reduced-motion: no-preference)").matches) return
+
+    const lenis = new Lenis({
+      autoRaf: true,
+      smoothWheel: true,
+      lerp: 0.045,
+      wheelMultiplier: 0.88,
+      touchMultiplier: 0.92,
+      syncTouch: true,
+      syncTouchLerp: 0.055,
+    })
+    lenisRef.current = lenis
+    return () => {
+      lenis.destroy()
+      lenisRef.current = null
+    }
+  }, [])
+
   return (
     <BrowserRouter>
       <CustomCursor />
-      <ScrollToHash />
+      <ScrollToHash lenisRef={lenisRef} />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/work" element={<WorkPage />} />

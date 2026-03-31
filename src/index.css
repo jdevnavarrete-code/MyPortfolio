@@ -391,11 +391,31 @@ html, body {
   animation: about-flower-opacity 6s ease-in-out infinite;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .about-about-photo-parallax {
+    will-change: transform;
+    transform: translateZ(0);
+    transform-origin: center top;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .about-flower-video,
   .key-skills-flower-video {
     animation: none;
     opacity: 0.9;
+  }
+}
+
+/* About: desktop — cierre del quote un poco a la izquierda para solapar la foto */
+@media (min-width: 769px) {
+  .about-flower-row {
+    margin-top: clamp(-9rem, -17vw, -4rem);
+  }
+
+  .about-flower-copy {
+    top: clamp(4.5rem, 11vw, 11rem) !important;
+    transform: translateX(clamp(-8.5rem, -17vw, -4rem));
   }
 }
 
@@ -412,7 +432,7 @@ html, body {
   }
 
   .about-flower-copy .about-flower-quote-inner > p {
-    font-size: clamp(1.3rem, 4.6vw, 1.85rem) !important;
+    font-size: clamp(1.45rem, 5.4vw, 2.05rem) !important;
     line-height: 1.28 !important;
   }
 

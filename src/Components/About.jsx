@@ -40,6 +40,9 @@ function BioParagraph({ visible = false }) {
 
 export default function About() {
   const aboutRef = useRef(null)
+  const aboutPhotoMediaRef = useRef(null)
+  const aboutPhotoImgRef = useRef(null)
+  const aboutPhotoParallaxYRef = useRef(0)
   const [quoteRevealed, setQuoteRevealed] = useState(false)
   const [isMobileLayout, setIsMobileLayout] = useState(() =>
     typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches,
@@ -51,6 +54,57 @@ export default function About() {
     sync()
     mq.addEventListener("change", sync)
     return () => mq.removeEventListener("change", sync)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    if (!window.matchMedia("(prefers-reduced-motion: no-preference)").matches) return
+
+    let rafId = 0
+    aboutPhotoParallaxYRef.current = 0
+
+    const tick = () => {
+      rafId = 0
+      const media = aboutPhotoMediaRef.current
+      const img = aboutPhotoImgRef.current
+      if (!media || !img) return
+
+      const vh = window.innerHeight || 1
+      const rect = media.getBoundingClientRect()
+      const mid = (rect.top + rect.height / 2 - vh / 2) / vh
+      const mobile = window.matchMedia("(max-width: 768px)").matches
+      const range = mobile ? 320 : 560
+      const max = mobile ? 240 : 380
+      const scale = mobile ? 1.22 : 1.35
+      const targetY = Math.max(-max, Math.min(max, mid * range))
+
+      const smooth = mobile ? 0.022 : 0.014
+      let y = aboutPhotoParallaxYRef.current
+      y += (targetY - y) * smooth
+      aboutPhotoParallaxYRef.current = y
+
+      img.style.transform = `translate3d(0, ${y}px, 0) scale(${scale})`
+
+      if (Math.abs(targetY - y) > 0.018) {
+        rafId = requestAnimationFrame(tick)
+      }
+    }
+
+    const schedule = () => {
+      if (!rafId) rafId = requestAnimationFrame(tick)
+    }
+
+    schedule()
+    window.addEventListener("scroll", schedule, { passive: true })
+    window.addEventListener("resize", schedule)
+    return () => {
+      window.removeEventListener("scroll", schedule)
+      window.removeEventListener("resize", schedule)
+      cancelAnimationFrame(rafId)
+      aboutPhotoParallaxYRef.current = 0
+      const img = aboutPhotoImgRef.current
+      if (img) img.style.transform = ""
+    }
   }, [])
 
   return (
@@ -83,7 +137,7 @@ export default function About() {
             maxWidth: "100%",
             fontFamily: "Arial, sans-serif",
             fontSize: "clamp(3.8rem, 4.8vw, 8rem)",
-            fontWeight: 700,
+            fontWeight: 500,
             color: "#fff",
             lineHeight: 1.25,
             textAlign: "left",
@@ -122,6 +176,7 @@ export default function About() {
         */}
         {/* Foto — desktop: columna izquierda; móvil: ancho completo */}
         <div
+          ref={aboutPhotoMediaRef}
           className="about-flower-media"
           style={{
             flex: "0 0 52%",
@@ -135,7 +190,8 @@ export default function About() {
           }}
         >
           <img
-            className="about-flower-video"
+            ref={aboutPhotoImgRef}
+            className="about-flower-video about-about-photo-parallax"
             src={jordyPhoto}
             alt="Jordy"
             draggable={false}
@@ -186,10 +242,10 @@ export default function About() {
                 margin: 0,
                 width: "100%",
                 fontFamily: "Arial, sans-serif",
-                fontSize: "clamp(2.2rem, 4.2vw, 6.5rem)",
-                fontWeight: 700,
+                fontSize: "clamp(3.8rem, 4.8vw, 8rem)",
+                fontWeight: 500,
                 color: "#fff",
-                lineHeight: 1.2,
+                lineHeight: 1.25,
                 overflowWrap: "break-word",
                 wordBreak: "break-word",
                 hyphens: "auto",
