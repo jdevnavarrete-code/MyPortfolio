@@ -4,7 +4,7 @@ import video1 from "../assets/videos/project7.mp4"
 import farmaWebStill from "../assets/iamges/FarmaWeb.jpg"
 import ecuaflowersStill from "../assets/iamges/ecuaflowers.jpg"
 import minAppStill from "../assets/iamges/MIndApp.jpg"
-import emergencyAppStill from "../assets/iamges/emergencyApp.jpg"
+import emergencyAppStill from "../assets/iamges/emergencyapp.jpg"
 import VenusStill from "../assets/iamges/Venus.jpg"
 
 export const CARDS_DATA = [
