@@ -58,15 +58,41 @@ function FallingLetters() {
     const wallR = Bodies.rectangle(w + 50, h / 2, 100, h * 3, { isStatic: true })
     World.add(world, [ground, wallL, wallR])
 
-    // Posición del mouse en coordenadas del contenedor (via window para mayor fiabilidad)
+    // Posición del puntero en coordenadas del contenedor (window: funciona al arrastrar el dedo en móvil)
     const mousePos = { x: -9999, y: -9999 }
-    const onMouseMove = (e) => {
+    const updatePointer = (clientX, clientY) => {
       const r = container.getBoundingClientRect()
-      mousePos.x = e.clientX - r.left
-      mousePos.y = e.clientY - r.top
-
+      mousePos.x = clientX - r.left
+      mousePos.y = clientY - r.top
     }
+    const onMouseMove = (e) => {
+      updatePointer(e.clientX, e.clientY)
+    }
+    const onTouchStart = (e) => {
+      if (e.touches.length === 0) return
+      const t = e.touches[0]
+      updatePointer(t.clientX, t.clientY)
+    }
+    const onTouchMove = (e) => {
+      if (e.touches.length === 0) return
+      const t = e.touches[0]
+      updatePointer(t.clientX, t.clientY)
+    }
+    const onTouchEnd = (e) => {
+      if (e.touches.length > 0) {
+        const t = e.touches[0]
+        updatePointer(t.clientX, t.clientY)
+        return
+      }
+      mousePos.x = -9999
+      mousePos.y = -9999
+    }
+
     window.addEventListener("mousemove", onMouseMove)
+    window.addEventListener("touchstart", onTouchStart, { passive: true })
+    window.addEventListener("touchmove", onTouchMove, { passive: true })
+    window.addEventListener("touchend", onTouchEnd)
+    window.addEventListener("touchcancel", onTouchEnd)
 
     // Repulsión en cada tick — fuerza escalada por masa para que funcione independiente del tamaño
     const REPULSION_RADIUS = 200
@@ -113,6 +139,10 @@ function FallingLetters() {
       World.clear(world)
       Engine.clear(engine)
       window.removeEventListener("mousemove", onMouseMove)
+      window.removeEventListener("touchstart", onTouchStart)
+      window.removeEventListener("touchmove", onTouchMove)
+      window.removeEventListener("touchend", onTouchEnd)
+      window.removeEventListener("touchcancel", onTouchEnd)
     }
   }, [])
 

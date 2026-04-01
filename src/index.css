@@ -69,6 +69,53 @@ html, body {
   min-height: 100%;
 }
 
+/* Header — escritorio: márgenes amplios; móvil: safe-area (notch) + tipografía/espaciado para no recortar */
+.site-header {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 2rem 4rem;
+}
+
+.site-header__nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2rem;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.site-header__nav a {
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .site-header {
+    padding-top: calc(0.65rem + env(safe-area-inset-top, 0px));
+    padding-right: max(0.55rem, env(safe-area-inset-right, 0px));
+    padding-bottom: 0.45rem;
+    padding-left: max(0.55rem, env(safe-area-inset-left, 0px));
+  }
+
+  .site-header__nav {
+    gap: clamp(0.35rem, 1.4vw, 0.65rem);
+    row-gap: 0.3rem;
+    justify-content: flex-end;
+  }
+
+  .site-header__nav a {
+    font-size: clamp(0.58rem, 2.45vw, 0.68rem);
+    letter-spacing: 0.09em;
+  }
+}
+
 /* Cabinet Grotesk medium — Scene, Contact, Hero (FallingLetters) */
 .scene-featured-heading,
 .contact-title-display,
@@ -130,7 +177,7 @@ html, body {
     color: #a01010 !important;
   }
 
-  .site-header nav a {
+  .site-header__nav a {
     color: rgba(255, 255, 255, 0.95) !important;
   }
 }

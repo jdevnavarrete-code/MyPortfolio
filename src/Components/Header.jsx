@@ -35,7 +35,6 @@ export default function Header({ light = false }) {
         top: 0,
         left: 0,
         right: 0,
-        padding: "2rem 4rem",
         display: "flex",
         justifyContent: "flex-end",
         alignItems: "center",
@@ -46,20 +45,9 @@ export default function Header({ light = false }) {
       {/* <div style={{ color: "#fff", fontSize: "0.75rem", letterSpacing: "0.1em" }}>
         <LocationTime />
       </div> */}
-      <nav style={{ display: "flex", gap: "2rem" }}>
+      <nav className="site-header__nav">
         {NAV_LINKS.map((link) => (
-          <Link
-            key={link.label}
-            to={link.to}
-            style={{
-              color: navColor,
-              fontFamily: "Arial, sans-serif",
-              textDecoration: "none",
-              fontSize: "0.75rem",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-            }}
-          >
+          <Link key={link.label} to={link.to} style={{ color: navColor }}>
             {link.label}
           </Link>
         ))}
