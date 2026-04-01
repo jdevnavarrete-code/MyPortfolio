@@ -36,7 +36,6 @@ export default function Header({ light = false }) {
         left: 0,
         right: 0,
         display: "flex",
-        justifyContent: "flex-end",
         alignItems: "center",
         zIndex: 50,
         fontFamily: "'Orbitron', sans-serif",
