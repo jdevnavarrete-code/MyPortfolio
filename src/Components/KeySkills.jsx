@@ -53,23 +53,35 @@ const FLOWER_GRADIENT_RIGHT = {
 const SKILL_GROUPS = [
   {
     topic: "Capabilities",
-    modules: ["Web Design", "Animation & Interaction", "Webflow", "AI"],
+    modules: [
+      "(UI/UX) Designer ",
+      "Frontend Development",
+      "Interactive Interfaces",
+      "Design Systems",
+      "AI Integration (Python, Data & Automation)",
+    ],
   },
   {
     topic: "Expertise",
     modules: [
-      "Graphic Design",
-      "Branding",
-      "Presentation",
-      "Social Media Design",
-      "Art Direction",
-      "Design Consulting",
-      "Mentoring",
+      "Web Applications",
+      "UX Strategy & Product Thinking",
+      "Interface Architecture (Scalable UI)",
+      "Performance & Frontend Optimization",
+      
+      "Component-Based Systems (Design Systems)",
+      "Prototyping, Testing & Iteration",
+      "AI-Enhanced Experiences",
     ],
   },
   {
     topic: "My Inspiration",
-    modules: ["Music", "Futurism & Retro Sci-Fi", "Cinema"],
+    modules: [
+      "Music",
+      "Technology & AI Evolution",
+      "Minimalism & Glassmorphism Interfaces",
+      "Interactive Experiences",
+    ],
   },
 ]
 

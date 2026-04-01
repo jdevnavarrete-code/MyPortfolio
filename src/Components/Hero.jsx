@@ -299,7 +299,7 @@ export default function Hero() {
               fontSize: "clamp(0.9rem, 1.2vw, 1rem)",
             }}
           >
-            <a href="linkedin.com/in/jordy-navarrete-590831264" target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>
+            <a href="https://linkedin.com/in/jordy-navarrete-590831264" target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>
               LinkedIn
             </a>
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>
