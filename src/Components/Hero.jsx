@@ -332,7 +332,7 @@ export default function Hero() {
             <a href="https://linkedin.com/in/jordy-navarrete-590831264" target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>
               LinkedIn
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>
+            <a href="https://github.com/jdnavarrete4?tab=repositories" target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>
               Github
             </a>
             <a href="https://dribbble.com" target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>
