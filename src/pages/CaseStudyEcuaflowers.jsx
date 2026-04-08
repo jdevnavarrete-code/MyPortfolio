@@ -7,7 +7,7 @@ import ecuaf2 from "../assets/iamges/Ecuaf2.png"
 import ecuaf3 from "../assets/iamges/Ecuaf3.png"
 import ecuaf4 from "../assets/iamges/Ecuaf4.jpg"
 import ecuaf5 from "../assets/iamges/Ecuaf5.png"
-import ecuaf5a from "../assets/iamges/Ecuaf5a.png"
+// import ecuaf5a from "../assets/iamges/Ecuaf5a.jpg"
 import ecuaf6 from "../assets/iamges/Ecuaf6.png"
 import ecuaf7 from "../assets/iamges/Ecuaf7.jpg"
 
@@ -109,7 +109,7 @@ function CaseStudyFigure({ src, alt, maxWidth, borderRadius }) {
 const CAROUSEL_SLIDES = [
   { src: ecuaf4, alt: "EcuaFlowers — pantalla 1" },
   { src: ecuaf5, alt: "EcuaFlowers — pantalla 2" },
-  { src: ecuaf5a, alt: "EcuaFlowers — wireframes en papel" },
+  // { src: ecuaf5a, alt: "EcuaFlowers — wireframes en papel" },
   { src: ecuaf6, alt: "EcuaFlowers — storyboard UX (escenario comerciante y pedido)" },
 ]
 
