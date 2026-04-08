@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from "react"
+import { Link } from "react-router-dom"
 
 import video1 from "../assets/videos/project7.mp4"
 import farmaWebStill from "../assets/iamges/FarmaWeb.jpg"
@@ -8,7 +9,15 @@ import emergencyAppStill from "../assets/iamges/emergencyapp.jpg"
 import VenusStill from "../assets/iamges/Venus.jpg"
 
 export const CARDS_DATA = [
-  { image: ecuaflowersStill, title: "ECUAFLOWERS APP ↗", role: "Front-end & Motion Developer", context: "Agency", stack: "React, Three.js, GSAP", year: "2024" },
+  {
+    image: ecuaflowersStill,
+    title: "ECUAFLOWERS APP ↗",
+    role: "Front-end & Motion Developer",
+    context: "Agency",
+    stack: "React, Three.js, GSAP",
+    year: "2024",
+    caseStudyPath: "/work/ecuaflowers",
+  },
   { image: minAppStill, title: "MIND APP ↗", role: "Product & UI Developer", context: "Product", stack: "React Native", year: "2024" },
   { image: emergencyAppStill, title: "EMERGENCY APP ↗", role: "Full-stack Developer", context: "Startup", stack: "React, Node.js", year: "2024" },
   { image: farmaWebStill, title: "FARMAWEB UTPL ↗", role: "Front-end & Back-end Developer", context: "Freelance", stack: "Wordpress", year: "2022" },
@@ -302,88 +311,125 @@ export default function Scene({ followsKeySkills = false } = {}) {
         }}
         aria-hidden={!videoVisible}
       >
-        <div
-          key={hoverIndex == null ? "scene-video-idle" : hoverIndex}
-          className={hoverIndex != null ? "scene-video-enter-scale" : undefined}
-          style={{
-            position: "absolute",
-            inset: 0,
-            pointerEvents: "none",
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              borderRadius: "2px",
-              overflow: "hidden",
-              boxShadow: videoVisible ? "0 28px 90px rgba(0, 0, 0, 0.45)" : "none",
-            }}
-          >
-            {hoveredProject?.image ? (
-              <img
-                src={hoveredProject.image}
-                alt={`${hoveredProject.title.replace(/\s*↗\s*$/, "")} — preview`}
+        {(() => {
+          const casePath = hoveredProject?.caseStudyPath
+          const previewInner = (
+            <>
+              <div
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  display: "block",
-                  opacity: 1,
-                }}
-              />
-            ) : (
-              <video
-                ref={videoRef}
-                muted
-                loop
-                playsInline
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  display: "block",
-                  opacity: 1,
-                }}
-              />
-            )}
-          </div>
-          {/* Capa a todo el ancho para alinear con la fila; el texto hace difference con el vídeo (centro) y con lo que hay detrás (laterales) */}
-          {videoVisible && hoveredProject && (
-            <div
-              className="scene-blend-title-wrap"
-              style={{
-                position: "absolute",
-                left: "50%",
-                top: 0,
-                height: "100%",
-                width: "100vw",
-                marginLeft: "-50vw",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "0 6vw",
-                boxSizing: "border-box",
-                pointerEvents: "none",
-              }}
-              aria-hidden
-            >
-              <span
-                className="scene-blend-title"
-                style={{
-                  ...ROW_TITLE_TYPO,
-                  maxWidth: "100%",
-                  textAlign: "center",
-                  color: "#ffffff",
-                  mixBlendMode: "difference",
-                  WebkitMixBlendMode: "difference",
+                  position: "absolute",
+                  inset: 0,
+                  borderRadius: "2px",
+                  overflow: "hidden",
+                  boxShadow: videoVisible ? "0 28px 90px rgba(0, 0, 0, 0.45)" : "none",
                 }}
               >
-                {hoveredProject.title}
-              </span>
+                {hoveredProject?.image ? (
+                  <img
+                    src={hoveredProject.image}
+                    alt={`${hoveredProject.title.replace(/\s*↗\s*$/, "")} — preview`}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      display: "block",
+                      opacity: 1,
+                      pointerEvents: "none",
+                    }}
+                  />
+                ) : (
+                  <video
+                    ref={videoRef}
+                    muted
+                    loop
+                    playsInline
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      display: "block",
+                      opacity: 1,
+                      pointerEvents: "none",
+                    }}
+                  />
+                )}
+              </div>
+              {videoVisible && hoveredProject && (
+                <div
+                  className="scene-blend-title-wrap"
+                  style={{
+                    position: "absolute",
+                    left: "50%",
+                    top: 0,
+                    height: "100%",
+                    width: "100vw",
+                    marginLeft: "-50vw",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "0 6vw",
+                    boxSizing: "border-box",
+                    pointerEvents: "none",
+                  }}
+                  aria-hidden
+                >
+                  <span
+                    className="scene-blend-title"
+                    style={{
+                      ...ROW_TITLE_TYPO,
+                      maxWidth: "100%",
+                      textAlign: "center",
+                      color: "#ffffff",
+                      mixBlendMode: "difference",
+                      WebkitMixBlendMode: "difference",
+                    }}
+                  >
+                    {hoveredProject.title}
+                  </span>
+                </div>
+              )}
+            </>
+          )
+
+          const wrapStyle = {
+            position: "absolute",
+            inset: 0,
+            ...(casePath
+              ? {
+                  display: "block",
+                  pointerEvents: "auto",
+                  cursor: "pointer",
+                  textDecoration: "none",
+                  color: "inherit",
+                  zIndex: 1,
+                }
+              : { pointerEvents: "none" }),
+          }
+
+          if (casePath) {
+            return (
+              <Link
+                key={hoverIndex == null ? "scene-video-idle" : hoverIndex}
+                to={casePath}
+                className={hoverIndex != null ? "scene-video-enter-scale" : undefined}
+                aria-label={`Ver caso de estudio — ${hoveredProject.title.replace(/\s*↗\s*$/, "")}`}
+                style={wrapStyle}
+              >
+                {previewInner}
+              </Link>
+            )
+          }
+
+          return (
+            <div
+              key={hoverIndex == null ? "scene-video-idle" : hoverIndex}
+              className={hoverIndex != null ? "scene-video-enter-scale" : undefined}
+              style={wrapStyle}
+            >
+              {previewInner}
             </div>
-          )}
-        </div>
+          )
+        })()}
       </div>
 
       {/* Lista + hero: hero ocupa 100vh; filas debajo */}
@@ -514,22 +560,40 @@ export default function Scene({ followsKeySkills = false } = {}) {
                   boxSizing: "border-box",
                 }}
               >
-                <a
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
-                  aria-hidden={hideListTitle}
-                  style={{
-                    ...ROW_TITLE_TYPO,
-                    color: rowHighlight
-                      ? "color-mix(in srgb, var(--_offbeat---color-accent-main) 72%, white)"
-                      : "var(--_offbeat---color-accent-main)",
-                    transition: "color 0.25s ease, opacity 0.3s ease, visibility 0.3s ease",
-                    opacity: hideListTitle ? 0 : 1,
-                    visibility: hideListTitle ? "hidden" : "visible",
-                  }}
-                >
-                  {item.title}
-                </a>
+                {item.caseStudyPath ? (
+                  <Link
+                    to={item.caseStudyPath}
+                    aria-hidden={hideListTitle}
+                    style={{
+                      ...ROW_TITLE_TYPO,
+                      color: rowHighlight
+                        ? "color-mix(in srgb, var(--_offbeat---color-accent-main) 72%, white)"
+                        : "var(--_offbeat---color-accent-main)",
+                      transition: "color 0.25s ease, opacity 0.3s ease, visibility 0.3s ease",
+                      opacity: hideListTitle ? 0 : 1,
+                      visibility: hideListTitle ? "hidden" : "visible",
+                    }}
+                  >
+                    {item.title}
+                  </Link>
+                ) : (
+                  <a
+                    href="#"
+                    onClick={(e) => e.preventDefault()}
+                    aria-hidden={hideListTitle}
+                    style={{
+                      ...ROW_TITLE_TYPO,
+                      color: rowHighlight
+                        ? "color-mix(in srgb, var(--_offbeat---color-accent-main) 72%, white)"
+                        : "var(--_offbeat---color-accent-main)",
+                      transition: "color 0.25s ease, opacity 0.3s ease, visibility 0.3s ease",
+                      opacity: hideListTitle ? 0 : 1,
+                      visibility: hideListTitle ? "hidden" : "visible",
+                    }}
+                  >
+                    {item.title}
+                  </a>
+                )}
               </div>
             </div>
           )

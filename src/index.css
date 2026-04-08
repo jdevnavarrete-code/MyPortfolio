@@ -46,6 +46,16 @@
     rgba(0, 0, 0, 0.08) 42%,
     transparent 52%
   );
+  /* Espejo de --portfolio-edge-fade-left (borde der. → transparente) */
+  --portfolio-edge-fade-right: linear-gradient(
+    to left,
+    #000 0%,
+    #000 7%,
+    rgba(0, 0, 0, 0.88) 16%,
+    rgba(0, 0, 0, 0.42) 30%,
+    rgba(0, 0, 0, 0.08) 42%,
+    transparent 52%
+  );
   --portfolio-red-stack-bg: var(--portfolio-edge-fade-top), var(--portfolio-edge-fade-bottom),
     var(--portfolio-red-radial-bg);
 }
@@ -691,6 +701,374 @@ body.scrolled-past-hero .hero-nav {
 @media (prefers-reduced-motion: reduce) {
   .page-loader__fill {
     transition: none;
+  }
+}
+
+/* Case study EcuaFlowers — ancho amplio, hero dos columnas */
+.case-study-page {
+  max-width: min(92rem, 100%);
+  padding: clamp(5.25rem, 9vh, 6.75rem) clamp(0.6rem, 2.2vw, 1.35rem) clamp(2.75rem, 7vh, 4.5rem);
+  box-sizing: border-box;
+}
+
+.case-study-hero {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 3.5vw, 2.75rem);
+  margin-bottom: clamp(2.25rem, 5vh, 3.5rem);
+}
+
+.case-study-hero-heading {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Imagen principal: exactamente una altura de viewport */
+.case-study-hero-visual {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+}
+
+@supports (height: 100dvh) {
+  .case-study-hero-visual {
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+  }
+}
+
+.case-study-hero-visual .case-study-hero-image {
+  box-shadow: none;
+}
+
+/*
+ * Viñeta en los 4 lados; el izquierdo va más fuerte (legibilidad del bloque de meta).
+ */
+.case-study-hero-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  --case-study-fade-inset-strong: 84%;
+  --case-study-fade-inset-soft: 68%;
+  background:
+    linear-gradient(
+      to right,
+      #000 0%,
+      #000 7%,
+      rgba(0, 0, 0, 0.97) 14%,
+      rgba(0, 0, 0, 0.72) 36%,
+      rgba(0, 0, 0, 0.28) 56%,
+      transparent var(--case-study-fade-inset-strong)
+    ),
+    linear-gradient(
+      to left,
+      rgba(0, 0, 0, 0.92) 0%,
+      rgba(0, 0, 0, 0.55) 30%,
+      rgba(0, 0, 0, 0.18) 46%,
+      transparent var(--case-study-fade-inset-soft)
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.92) 0%,
+      rgba(0, 0, 0, 0.55) 30%,
+      rgba(0, 0, 0, 0.18) 46%,
+      transparent var(--case-study-fade-inset-soft)
+    ),
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.92) 0%,
+      rgba(0, 0, 0, 0.55) 30%,
+      rgba(0, 0, 0, 0.18) 46%,
+      transparent var(--case-study-fade-inset-soft)
+    ),
+    radial-gradient(
+      ellipse 96% 132% at 0% 50%,
+      rgba(255, 95, 95, 0.34) 0%,
+      rgba(200, 45, 48, 0.14) 52%,
+      transparent 76%
+    );
+}
+
+.case-study-hero-title-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  padding: clamp(1.1rem, 3.5vw, 2.25rem);
+  box-sizing: border-box;
+  pointer-events: none;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.case-study-hero-title-layer .case-study-hero-meta,
+.case-study-hero-title-layer p,
+.case-study-hero-title-layer > div {
+  pointer-events: auto;
+}
+
+.case-study-hero-title-layer .case-study-hero-meta {
+  width: auto;
+  max-width: min(100%, 52rem);
+  margin-top: 0;
+  justify-content: flex-start;
+  text-align: left;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+}
+
+/* Contenido al ancho natural; 1fr 1fr dejaba mitades vacías y “separaba” mucho el texto */
+.case-study-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  column-gap: clamp(1.75rem, 5vw, 3.25rem);
+  row-gap: clamp(1rem, 2.5vw, 1.75rem);
+  margin-top: 0;
+}
+
+.case-study-hero-meta > div {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: min(100%, 22rem);
+}
+
+.case-study-hero-meta--overlay > div > div:last-child {
+  margin-bottom: 0 !important;
+}
+
+@media (max-width: 599px) {
+  .case-study-hero-meta {
+    flex-direction: column;
+    column-gap: 0;
+  }
+
+  .case-study-hero-meta > div {
+    max-width: 100%;
+  }
+}
+
+.case-study-hero-image {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.case-study-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* EcuaFlowers — carrusel: perspectiva 3D sutil, cristal mínimo */
+.ecuaf-carousel {
+  --ecuaf-carousel-max-h: min(72vh, 640px);
+  position: relative;
+  margin: clamp(4.5rem, 12vh, 7.5rem) 0;
+  padding: clamp(0.5rem, 2vw, 1.25rem) 0 clamp(2.5rem, 5vh, 3rem);
+  perspective: 1400px;
+  perspective-origin: 50% 40%;
+}
+
+.ecuaf-carousel__stage {
+  position: relative;
+}
+
+.ecuaf-carousel__tilt {
+  transform-style: preserve-3d;
+  transform: rotateX(3.5deg) rotateY(-2.25deg) translateZ(0);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: none;
+}
+
+.ecuaf-carousel:hover .ecuaf-carousel__tilt {
+  transform: rotateX(1.5deg) rotateY(-1deg) translateZ(0);
+}
+
+.ecuaf-carousel__viewport {
+  overflow: hidden;
+  touch-action: pan-y pinch-zoom;
+  background: transparent;
+  width: 100%;
+  max-height: var(--ecuaf-carousel-max-h);
+}
+
+.ecuaf-carousel__track {
+  display: flex;
+  align-items: stretch;
+  height: var(--ecuaf-carousel-max-h);
+  transition: transform 0.85s cubic-bezier(0.25, 0.1, 0.25, 1);
+  will-change: transform;
+}
+
+.ecuaf-carousel__slide {
+  box-sizing: border-box;
+  flex: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.35rem, 1.5vw, 0.75rem);
+}
+
+.ecuaf-carousel__slide img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.ecuaf-carousel__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-top: -1.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(8, 8, 8, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.ecuaf-carousel__nav:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ecuaf-carousel__nav:active {
+  transform: scale(0.96);
+}
+
+.ecuaf-carousel__nav--prev {
+  left: clamp(0.25rem, 2vw, 0.85rem);
+}
+
+.ecuaf-carousel__nav--next {
+  right: clamp(0.25rem, 2vw, 0.85rem);
+}
+
+.ecuaf-carousel__nav svg {
+  width: 1rem;
+  height: 1rem;
+  opacity: 0.9;
+}
+
+.ecuaf-carousel__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.1rem;
+  padding: 0 clamp(0.15rem, 1vw, 0.35rem);
+}
+
+.ecuaf-carousel__counter {
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(0.65rem, 1vw, 0.72rem);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.36);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.ecuaf-carousel__counter strong {
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.ecuaf-carousel__segments {
+  display: flex;
+  flex: 1;
+  gap: 6px;
+  max-width: min(12rem, 42%);
+}
+
+.ecuaf-carousel__segment {
+  flex: 1;
+  height: 2px;
+  padding: 0;
+  border: none;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: background 0.3s ease, height 0.25s ease;
+}
+
+.ecuaf-carousel__segment.is-active {
+  background: rgba(255, 255, 255, 0.82);
+  height: 3px;
+}
+
+.ecuaf-carousel__segment:hover:not(.is-active) {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ecuaf-carousel__tilt,
+  .ecuaf-carousel:hover .ecuaf-carousel__tilt {
+    transform: none;
+    transition: none;
+  }
+
+  .ecuaf-carousel__track {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 599px) {
+  .ecuaf-carousel {
+    --ecuaf-carousel-max-h: min(58vh, 420px);
+  }
+
+  .ecuaf-carousel__tilt {
+    transform: rotateX(2deg) rotateY(-1.25deg);
+    border-radius: 8px;
+  }
+
+  .ecuaf-carousel:hover .ecuaf-carousel__tilt {
+    transform: rotateX(1deg) rotateY(-0.5deg);
+  }
+
+  .ecuaf-carousel__nav {
+    width: 2.35rem;
+    height: 2.35rem;
+    margin-top: -1.175rem;
   }
 }
 

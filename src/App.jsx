@@ -4,6 +4,7 @@ import Lenis from "lenis"
 import "lenis/dist/lenis.css"
 import HomePage from "./pages/HomePage"
 import WorkPage from "./pages/WorkPage"
+import CaseStudyEcuaflowers from "./pages/CaseStudyEcuaflowers"
 import CustomCursor from "./Components/CustomCursor"
 
 function ScrollToHash({ lenisRef }) {
@@ -90,6 +91,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/work" element={<WorkPage />} />
+        <Route path="/work/ecuaflowers" element={<CaseStudyEcuaflowers />} />
       </Routes>
     </BrowserRouter>
   )
